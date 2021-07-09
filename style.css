@@ -1,0 +1,497 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  outline: none;
+}
+
+.start-slide {
+  position: absolute;
+  left: calc(50% - 252px);
+  top: calc(50% - 63px);
+  opacity: 0;
+  z-index: 0;
+  transition: opacity .8s;
+  overflow: hidden;
+}
+
+.start-slide__form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.start-slide__form-input {
+  text-align: center;
+  width: 500px;
+  height: 50px;
+  border-radius: 30px;
+  border: 2px solid #000;
+  margin-bottom: 24px;
+  outline: none;
+}
+
+.start-slide__form-input::placeholder {
+  color: #000;
+  font-size: 30px;
+}
+
+.start-slide__form-input::-webkit-input-placeholder,
+.start-slide__form-input::-ms-input-placeholder {
+  color: #000;
+  font-size: 30px;
+}
+
+.start-slide__form-btn {
+  width: 290px;
+  font-size: 38px;
+  border: 2px solid #000;
+  border-radius: 40px;
+  background: #fff;
+}
+
+.game-slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  z-index: 0;
+  transition: opacity .8s;
+  overflow: hidden;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 44%;
+}
+
+.game-slide__timer {
+  font-size: 60px;
+  text-align: center;
+  width: 30%;
+  border: 2px solid #000;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+.game-slide__cash {
+  font-size: 19px;
+}
+
+.game-slide__questions {
+  position: relative;
+  width: 100%;
+  height: 302px;
+}
+
+.question {
+  position: absolute;
+  opacity: 0;
+  z-index: 0;
+  transition: opacity .8s;
+}
+
+.question-active {
+  opacity: 1;
+  z-index: 1;
+}
+
+
+.question__text {
+  font-size: 40px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.question__answers {
+  width: 60%;
+  margin: 0 auto;
+}
+
+.answer {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+
+.game-slide__check-btn {
+  font-size: 45px;
+  background: #fff;
+  border: 2px solid #000;
+  border-radius: 20px;
+  width: 50%;
+  z-index: 3;
+}
+
+.game-slide__buttons {
+  display: flex;
+  flex-direction: column;
+  padding-top: 40px;
+  width: 23%;
+}
+
+.btn__game-over {
+  background: #fff;
+  font-size: 40px;
+  border: 2px solid #000;
+  border-radius: 20px;
+  margin-bottom: 28px;
+}
+
+.btn-help {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.btn-help__title {
+  font-size: 21px;
+  margin-bottom: 10px;
+}
+
+.btn-help__item {
+  font-size: 28px;
+  padding: 14px;
+  margin-bottom: 30px;
+  background: #fff;
+  border: 2px solid #000;
+  border-radius: 20px;
+  width: 70%;
+  transition: opacity .5s;
+}
+
+.end-slide {
+  position: absolute;
+  top: calc(50% - 84px);
+  left: calc(50% - 287px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  z-index: 0;
+  transition: opacity .8s;
+  overflow: hidden;
+}
+
+.end-slide__title {
+  font-size: 33px;
+  text-align: center;
+  margin-bottom: 33px;
+  width: 573px;
+}
+
+.end-slide__btn {
+  background: #fff;
+  font-size: 47px;
+  border: 2px solid #000;
+  border-radius: 20px;
+  width: 491px;
+}
+
+.active {
+  z-index: 2;
+  opacity: 1;
+}
+
+.error {
+  position: absolute;
+  bottom: 121%;
+  text-align: center;
+  background: #000;
+  opacity: .3;
+  border-radius: 20px;
+  color: #fff;
+  padding: 10px;
+  transition: opacity 1s;
+}
+
+.error::after {
+  content: '';
+  position: absolute;
+  border: 15px solid transparent;
+  border-top: 14px solid #000;
+  top: 100%;
+  left: calc(50% - 15px);
+}
+
+
+@media (max-width: 1340px) {
+  .wrapper {
+    width: 50%;
+  }
+}
+
+@media (max-width: 1245px) {
+  .btn__game-over {
+    padding: 10px;
+    font-size: 31px;
+  }
+
+  .btn-help__item {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 1185px) {
+  .game-slide {
+    justify-content: flex-start;
+  }
+
+  .wrapper {
+    width: 70%;
+  }
+
+  .question {
+    left: 8%;
+  }
+}
+
+
+@media (max-width: 800px) {
+  .game-slide__cash {
+    margin-bottom: 4%;
+  }
+
+  .game-slide__questions {
+    height: 267px;
+  }
+
+  .question__text {
+    font-size: 30px;
+  }
+
+  .answer {
+    font-size: 18px;
+  }
+
+  .game-slide__check-btn {
+    font-size: 35px;
+  }
+}
+
+@media (max-width: 732px) {
+  .btn__game-over {
+    padding: 7px;
+    font-size: 18px;
+  }
+
+  .btn-help__item {
+    font-size: 15px;
+  }
+
+  .question__text {
+    font-size: 26px;
+  }
+}
+
+
+@media (max-width: 626px) {
+  .start-slide {
+    left: calc(50% - 197px);
+    top: calc(50% - 53px);
+  }
+
+  .start-slide__form-input {
+    width: 390px;
+    height: 40px;
+  }
+
+  .start-slide__form-input::placeholder {
+    font-size: 20px;
+  }
+
+  .start-slide__form-input::-webkit-input-placeholder,
+  .start-slide__form-input::-ms-input-placeholder {
+    font-size: 20px;
+  }
+
+  .start-slide__form-btn {
+    width: 238px;
+    font-size: 30px;
+  }
+
+  .question__answers {
+    width: 80%;
+  }
+
+  .end-slide {
+    top: calc(50% - 80px);
+    left: calc(50% - 171px);
+  }
+
+  .end-slide__title {
+    width: 337px;
+    font-size: 29px;
+    margin-bottom: 4%;
+  }
+
+  .end-slide__btn {
+    width: 353px;
+    font-size: 37px;
+  }
+}
+
+@media (max-width: 520px) {
+  .game-slide__timer {
+    font-size: 50px;
+  }
+
+  .game-slide__cash {
+    font-size: 16px;
+  }
+
+  .game-slide__questions {
+    height: 212px;
+  }
+
+  .question__text {
+    font-size: 21px;
+  }
+
+  .answer {
+    margin-bottom: 9px;
+    font-size: 15px;
+  }
+
+  .game-slide__check-btn {
+    font-size: 27px;
+  }
+
+  .btn-help__item {
+    width: 90%;
+    padding: 8px;
+  }
+}
+
+@media (max-width: 430px) {
+  .start-slide {
+    left: calc(50% - 135px);
+  }
+
+  .start-slide__form-input {
+    width: 270px;
+  }
+
+  .start-slide__form-btn {
+    width: 180px;
+  }
+
+  .game-slide__timer {
+    font-size: 36px;
+  }
+
+  .game-slide__cash {
+    margin-bottom: 2%;
+  }
+
+  .game-slide__questions {
+    height: 173px;
+  }
+
+  .question__text {
+    font-size: 18px;
+    margin-bottom: 5px;
+  }
+
+  .answer {
+    font-size: 12px;
+  }
+
+  .game-slide__check-btn {
+    font-size: 18px;
+  }
+
+  .game-slide__btn {
+    width: 28%;
+  }
+
+  .btn-help__title {
+    font-size: 18px;
+  }
+
+  .btn__game-over {
+    font-size: 12px;
+    margin-bottom: 57px;
+  }
+
+  .btn-help__item {
+    font-size: 11px;
+    margin-bottom: 17px;
+  }
+
+  .end-slide {
+    left: calc(50% - 150px);
+  }
+
+  .end-slide__title {
+    width: 300px;
+    font-size: 24px;
+  }
+
+  .end-slide__btn {
+    width: 294px;
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 360px) {
+  .game-slide__questions {
+    height: 190px;
+  }
+
+  .game-slide__cash {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 310px) {
+  .start-slide {
+    left: calc(50% - 100px);
+  }
+
+  .start-slide__form-input {
+    width: 200px;
+  }
+
+  .start-slide__form-btn {
+    width: 148px;
+  }
+
+  .game-slide__questions {
+    height: 167px;
+  }
+
+  .question__text {
+    font-size: 15px;
+  }
+
+  .answer {
+    font-size: 10px;
+    margin-bottom: 4px;
+  }
+
+  .game-slide__buttons {
+    width: 27%;
+  }
+
+  .end-slide {
+    left: calc(50% - 125px);
+  }
+
+  .end-slide__title {
+    width: 240px;
+    font-size: 21px;
+  }
+
+  .end-slide__btn {
+    width: 250px;
+    font-size: 27px;
+  }
+}
