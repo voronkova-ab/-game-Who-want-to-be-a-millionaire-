@@ -7,6 +7,21 @@ button {
   outline: none;
 }
 
+.preloader {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  background: #fff url('preloader.gif') no-repeat center;
+}
+
+.none {
+  display: none;
+  z-index: 0;
+}
+
 .start-slide {
   position: absolute;
   left: calc(50% - 252px);
@@ -88,7 +103,7 @@ button {
 .game-slide__questions {
   position: relative;
   width: 100%;
-  height: 302px;
+  margin-bottom: 15px;
 }
 
 .question {
@@ -259,10 +274,6 @@ button {
     margin-bottom: 4%;
   }
 
-  .game-slide__questions {
-    height: 267px;
-  }
-
   .question__text {
     font-size: 30px;
   }
@@ -347,10 +358,6 @@ button {
     font-size: 16px;
   }
 
-  .game-slide__questions {
-    height: 212px;
-  }
-
   .question__text {
     font-size: 21px;
   }
@@ -389,10 +396,6 @@ button {
 
   .game-slide__cash {
     margin-bottom: 2%;
-  }
-
-  .game-slide__questions {
-    height: 173px;
   }
 
   .question__text {
@@ -442,10 +445,6 @@ button {
 }
 
 @media (max-width: 360px) {
-  .game-slide__questions {
-    height: 190px;
-  }
-
   .game-slide__cash {
     font-size: 13px;
   }
@@ -462,10 +461,6 @@ button {
 
   .start-slide__form-btn {
     width: 148px;
-  }
-
-  .game-slide__questions {
-    height: 167px;
   }
 
   .question__text {
