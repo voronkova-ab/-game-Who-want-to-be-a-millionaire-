@@ -66,7 +66,6 @@ function processRequest() {
 
       let requestQuestions = result.map(item => item.question);
       requestCorrectAnswers = result.map(item => item.correct_answer);
-      console.log(requestCorrectAnswers);
       let requestAllAnswers = result.map(item => [...item.incorrect_answers, item.correct_answer]);
       let questionsText = document.querySelectorAll('.question__text');
       let answersText = Array.from(questions).map(item => item.querySelectorAll('.answer__text'));
@@ -124,7 +123,6 @@ function insertTextAnswers(defaultAnswers, requestAnswers) {
 
 function makeQuestionsConteinerHeight(question) {
   questionsContainer.style.height = question.offsetHeight + 'px';
-  console.log(questionsContainer.style.height);
 }
 
 
