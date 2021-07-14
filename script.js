@@ -252,17 +252,18 @@ function showTrueAnswers(event) {
   let target = event.target;
   let thisAnswers = document.querySelectorAll('.question-active .question__answers .answer__radio');
   let falseAnswers = Array.from(thisAnswers).filter(answer => {
-     return !correctAnswers.includes(answer.value) && !requestCorrectAnswers.includes(answer.value);
+    let falseAnswers = !correctAnswers.includes(answer.value) && !requestCorrectAnswers.includes(answer.value);
+    return falseAnswers && !answer.hasAttribute('disabled');
   });
 
-  let firstRandomNum = getRandomNumber(3);
+  let firstRandomNum = getRandomNumber(falseAnswers.length);
   let secondRandomNum;
   do {
-    secondRandomNum = getRandomNumber(3);
+    secondRandomNum = getRandomNumber(falseAnswers.length);
   } while (firstRandomNum === secondRandomNum)
 
   if (Array.from(target.classList).includes('btn-help__item_opinion-audience')) {
-    falseAnswers[getRandomNumber(3)].setAttribute('disabled', 'disabled');
+    falseAnswers[getRandomNumber(falseAnswers.length)].setAttribute('disabled', 'disabled');
   } else {
     falseAnswers[firstRandomNum].setAttribute('disabled', 'disabled');
     falseAnswers[secondRandomNum].setAttribute('disabled', 'disabled');
