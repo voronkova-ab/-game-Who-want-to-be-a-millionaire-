@@ -256,17 +256,20 @@ function showTrueAnswers(event) {
     return falseAnswers && !answer.hasAttribute('disabled');
   });
 
-  let firstRandomNum = getRandomNumber(falseAnswers.length);
-  let secondRandomNum;
-  do {
-    secondRandomNum = getRandomNumber(falseAnswers.length);
-  } while (firstRandomNum === secondRandomNum)
+  let isBtnOpinionAudience = Array.from(target.classList).includes('btn-help__item_opinion-audience');
+  const makeDisabled = (num) => falseAnswers[getRandomNumber(num)].setAttribute('disabled', 'disabled');
 
-  if (Array.from(target.classList).includes('btn-help__item_opinion-audience')) {
-    falseAnswers[getRandomNumber(falseAnswers.length)].setAttribute('disabled', 'disabled');
+  if (isBtnOpinionAudience || falseAnswers.length === 1) {
+    makeDisabled(falseAnswers.length);
   } else {
-    falseAnswers[firstRandomNum].setAttribute('disabled', 'disabled');
-    falseAnswers[secondRandomNum].setAttribute('disabled', 'disabled');
+    let firstRandomNum = getRandomNumber(falseAnswers.length);
+    let secondRandomNum;
+    do {
+      secondRandomNum = getRandomNumber(falseAnswers.length);
+    } while (firstRandomNum === secondRandomNum)
+
+    makeDisabled(firstRandomNum);
+    makeDisabled(secondRandomNum);
   }
 
   target.removeEventListener('click', showTrueAnswers);
