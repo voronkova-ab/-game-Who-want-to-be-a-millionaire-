@@ -22,6 +22,8 @@ let moneyQuestion;
 let timer;
 let seconds = 60;
 let userName;
+let secondRandomNum;
+let firstRandomNum;
 
 const requestUrl = 'https://opentdb.com/api.php?amount=5&type=multiple';
 const preloader = document.querySelector('.preloader');
@@ -256,24 +258,60 @@ function showTrueAnswers(event) {
     return falseAnswers && !answer.hasAttribute('disabled');
   });
 
-  let isBtnOpinionAudience = Array.from(target.classList).includes('btn-help__item_opinion-audience');
-  const makeDisabled = (num) => falseAnswers[getRandomNumber(num)].setAttribute('disabled', 'disabled');
+  let isBtnFiftyFifty = Array.from(target.classList).includes('btn-help__item_fifty-fifty');
+  const makeDisabled = num => falseAnswers[num].setAttribute('disabled', 'disabled');
 
-  if (isBtnOpinionAudience || falseAnswers.length === 1) {
-    makeDisabled(falseAnswers.length);
-  } else {
-    let firstRandomNum = getRandomNumber(falseAnswers.length);
-    let secondRandomNum;
-    do {
-      secondRandomNum = getRandomNumber(falseAnswers.length);
-    } while (firstRandomNum === secondRandomNum)
+  if (isBtnFiftyFifty) {
+      generateTwoNumber();
 
-    makeDisabled(firstRandomNum);
-    makeDisabled(secondRandomNum);
-  }
+      makeDisabled(firstRandomNum);
+      makeDisabled(secondRandomNum);
+   } else showModal(target.classList[1], falseAnswers);
 
   target.removeEventListener('click', showTrueAnswers);
   target.style.opacity = '0';
+}
+
+
+function generateTwoNumber() {
+  firstRandomNum = getRandomNumber(3);
+  do {
+    secondRandomNum = getRandomNumber(3);
+  } while (firstRandomNum === secondRandomNum)
+}
+
+
+function showModal(classBtn, answers) {
+  const modal = document.querySelector('.modal');
+  const modalTitle = document.querySelector('.modal__title');
+  const modalAnswer = document.querySelector('.modal__answer');
+
+  modal.classList.add('modal-active');
+  gameSlide.classList.add('content-blur');
+
+  if (classBtn === 'btn-help__item_call' && answers.length === 1) {
+    modalTitle.textContent = 'Ваш друг считает, что неверный ответ:';
+    modalAnswer.textContent = `${answers[getRandomNumber(answers.length)].value}`;
+  }
+
+  if (classBtn === 'btn-help__item_opinion-audience') {
+    modalTitle.textContent = 'Зал считает, что неверный ответ:';
+    modalAnswer.textContent = `${answers[getRandomNumber(answers.length)].value}`;
+  }
+
+  if (classBtn === 'btn-help__item_call' && answers.length > 1) {
+    modalTitle.textContent = 'Ваш друг считает, что неверные ответы:';
+
+    generateTwoNumber();
+
+    modalAnswer.textContent = `${answers[firstRandomNum].value} и ${answers[secondRandomNum].value}.`
+  }
+
+  const modalCloseBtn = document.querySelector('.modal__close-btn');
+  modalCloseBtn.onclick = () => {
+    modal.classList.remove('modal-active');
+    gameSlide.classList.remove('content-blur');
+  }
 }
 
 function getRandomNumber(max) {
