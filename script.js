@@ -85,10 +85,25 @@ processRequest();
 
 
 function insertTextQuestions(defaultQuestions, requestQuestions) {
-    Array.from(defaultQuestions).forEach((item, index) => {
-      item.textContent = requestQuestions[index];
+    let textRequestQuestions = Array.from(requestQuestions).map(item => {
+
+      return (
+        item.replace(/&quot;/g, `'`)
+            .replace(/&#039;/g, '`')
+            .replace(/&rsquo;/g, `'`)
+            .replace(/&ldquo;/g, `'`)
+            .replace(/&uacute;/g, `Ú`)
+            .replace(/&eacute;/g, 'É')
+            .replace(/&amp;/g, '&')
+            .replace(/&ouml;/g, 'Ö')
+            .replace(/&Uuml;/g, 'Ü')
+      )
     });
-  }
+
+  Array.from(defaultQuestions).forEach((item, index) => {
+    item.textContent = textRequestQuestions[index];
+  });
+}
 
 
 function insertTextAnswers(defaultAnswers, requestAnswers) {
