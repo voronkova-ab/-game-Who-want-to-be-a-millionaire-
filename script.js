@@ -71,7 +71,6 @@ function processRequest() {
       let requestAllAnswers = result.map(item => [...item.incorrect_answers, item.correct_answer]);
       let questionsText = document.querySelectorAll('.question__text');
       let answersText = Array.from(questions).map(item => item.querySelectorAll('.answer__text'));
-
       insertTextQuestions(questionsText, requestQuestions);
       insertTextAnswers(answersText, requestAllAnswers);
     })
@@ -85,20 +84,8 @@ processRequest();
 
 
 function insertTextQuestions(defaultQuestions, requestQuestions) {
-    let textRequestQuestions = Array.from(requestQuestions).map(item => {
-
-      return (
-        item.replace(/&quot;/g, `'`)
-            .replace(/&#039;/g, '`')
-            .replace(/&rsquo;/g, `'`)
-            .replace(/&ldquo;/g, `'`)
-            .replace(/&uacute;/g, `Ú`)
-            .replace(/&eacute;/g, 'É')
-            .replace(/&amp;/g, '&')
-            .replace(/&ouml;/g, 'Ö')
-            .replace(/&Uuml;/g, 'Ü')
-      )
-    });
+  let textRequestQuestions = requestQuestions.map(item => removeExtraCharacters(item));
+  console.log(textRequestQuestions);
 
   Array.from(defaultQuestions).forEach((item, index) => {
     item.textContent = textRequestQuestions[index];
@@ -107,6 +94,10 @@ function insertTextQuestions(defaultQuestions, requestQuestions) {
 
 
 function insertTextAnswers(defaultAnswers, requestAnswers) {
+    let textRequestAnswers = requestAnswers.map(item => item.map(item => removeExtraCharacters(item)));
+
+    console.log(textRequestAnswers);
+
     let a, b, c, d;
     function getRandomAnswerNumber() {
         a = getRandomNumber(4);
@@ -126,20 +117,34 @@ function insertTextAnswers(defaultAnswers, requestAnswers) {
 
     defaultAnswers.forEach((arr, index) => {
         getRandomAnswerNumber();
-        arr[a].textContent = requestAnswers[index][0];
-        arr[b].textContent = requestAnswers[index][1];
-        arr[c].textContent = requestAnswers[index][2];
-        arr[d].textContent = requestAnswers[index][3];
+        arr[a].textContent = textRequestAnswers[index][0];
+        arr[b].textContent = textRequestAnswers[index][1];
+        arr[c].textContent = textRequestAnswers[index][2];
+        arr[d].textContent = textRequestAnswers[index][3];
 
-        arr[a].previousElementSibling.value = requestAnswers[index][0];
-        arr[b].previousElementSibling.value = requestAnswers[index][1];
-        arr[c].previousElementSibling.value = requestAnswers[index][2];
-        arr[d].previousElementSibling.value = requestAnswers[index][3];
+        arr[a].previousElementSibling.value = textRequestAnswers[index][0];
+        arr[b].previousElementSibling.value = textRequestAnswers[index][1];
+        arr[c].previousElementSibling.value = textRequestAnswers[index][2];
+        arr[d].previousElementSibling.value = textRequestAnswers[index][3];
     });
   }
 
+
 function makeQuestionsConteinerHeight(question) {
   questionsContainer.style.height = question.offsetHeight + 'px';
+}
+
+
+function removeExtraCharacters(string) {
+  return string.replace(/&quot;/g, `'`)
+               .replace(/&#039;/g, '`')
+               .replace(/&rsquo;/g, `'`)
+               .replace(/&ldquo;/g, `'`)
+               .replace(/&uacute;/g, `Ú`)
+               .replace(/&eacute;/g, 'É')
+               .replace(/&amp;/g, '&')
+               .replace(/&ouml;/g, 'Ö')
+               .replace(/&Uuml;/g, 'Ü');
 }
 
 
