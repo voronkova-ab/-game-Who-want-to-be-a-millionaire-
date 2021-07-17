@@ -85,7 +85,6 @@ processRequest();
 
 function insertTextQuestions(defaultQuestions, requestQuestions) {
   let textRequestQuestions = requestQuestions.map(item => removeExtraCharacters(item));
-  console.log(textRequestQuestions);
 
   Array.from(defaultQuestions).forEach((item, index) => {
     item.textContent = textRequestQuestions[index];
@@ -95,8 +94,6 @@ function insertTextQuestions(defaultQuestions, requestQuestions) {
 
 function insertTextAnswers(defaultAnswers, requestAnswers) {
     let textRequestAnswers = requestAnswers.map(item => item.map(item => removeExtraCharacters(item)));
-
-    console.log(textRequestAnswers);
 
     let a, b, c, d;
     function getRandomAnswerNumber() {
@@ -286,7 +283,7 @@ function showTrueAnswers(event) {
 
       makeDisabled(firstRandomNum);
       makeDisabled(secondRandomNum);
-   } else showModal(target.classList[1], falseAnswers);
+   } else showModal(target.classList[1], thisAnswers);
 
   target.removeEventListener('click', showTrueAnswers);
   target.style.opacity = '0';
@@ -301,7 +298,7 @@ function generateTwoNumber() {
 }
 
 
-function showModal(classBtn, answers) {
+function showModal(classBtn, allAnswers) {
   const modal = document.querySelector('.modal');
   const modalTitle = document.querySelector('.modal__title');
   const modalAnswer = document.querySelector('.modal__answer');
@@ -309,22 +306,16 @@ function showModal(classBtn, answers) {
   modal.classList.add('modal-active');
   gameSlide.classList.add('content-blur');
 
-  if (classBtn === 'btn-help__item_call' && answers.length === 1) {
-    modalTitle.textContent = 'Ваш друг считает, что неверный ответ:';
-    modalAnswer.textContent = `${answers[getRandomNumber(answers.length)].value}`;
-  }
-
   if (classBtn === 'btn-help__item_opinion-audience') {
-    modalTitle.textContent = 'Зал считает, что неверный ответ:';
-    modalAnswer.textContent = `${answers[getRandomNumber(answers.length)].value}`;
-  }
+    modalTitle.textContent = `Зал считает, что верный ответ:`;
+    modalAnswer.textContent = `${allAnswers[getRandomNumber(allAnswers.length)].value}`;
+  } else {
+    let correctAnswer = Array.from(allAnswers).filter(item => correctAnswers.includes(item.value))
+                        && Array.from(allAnswers).filter(item => requestCorrectAnswers.includes(item.value));
+    let answerProbabilityHalf = [correctAnswer[0].value, allAnswers[getRandomNumber(allAnswers.length)].value];
 
-  if (classBtn === 'btn-help__item_call' && answers.length > 1) {
-    modalTitle.textContent = 'Ваш друг считает, что неверные ответы:';
-
-    generateTwoNumber();
-
-    modalAnswer.textContent = `${answers[firstRandomNum].value} и ${answers[secondRandomNum].value}.`
+    modalTitle.textContent = `Ваш друг, выбирая из ответов: ${answerProbabilityHalf[0]} и ${answerProbabilityHalf[1]}, считает, что правильный:`;
+    modalAnswer.textContent = `${answerProbabilityHalf[getRandomNumber(answerProbabilityHalf.length)]}`;
   }
 
   const modalCloseBtn = document.querySelector('.modal__close-btn');
@@ -333,6 +324,7 @@ function showModal(classBtn, answers) {
     gameSlide.classList.remove('content-blur');
   }
 }
+
 
 function getRandomNumber(max) {
   return Math.floor(Math.random() * max);
