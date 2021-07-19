@@ -306,13 +306,17 @@ function showModal(classBtn, allAnswers) {
   modal.classList.add('modal-active');
   gameSlide.classList.add('content-blur');
 
+  let activeAnswers = Array.from(allAnswers).filter(item => !item.hasAttribute('disabled'));
+
   if (classBtn === 'btn-help__item_opinion-audience') {
     modalTitle.textContent = `Зал считает, что верный ответ:`;
-    modalAnswer.textContent = `${allAnswers[getRandomNumber(allAnswers.length)].value}`;
+    modalAnswer.textContent = `${activeAnswers[getRandomNumber(activeAnswers.length)].value}`;
   } else {
     let correctAnswer = Array.from(allAnswers).filter(item => correctAnswers.includes(item.value))
                         && Array.from(allAnswers).filter(item => requestCorrectAnswers.includes(item.value));
-    let answerProbabilityHalf = [correctAnswer[0].value, allAnswers[getRandomNumber(allAnswers.length)].value];
+
+    let falseAnswers = activeAnswers.filter(item => item.value !== correctAnswer[0].value);
+    let answerProbabilityHalf = [correctAnswer[0].value, falseAnswers[getRandomNumber(falseAnswers.length)].value];
 
     modalTitle.textContent = `Ваш друг, выбирая из ответов: ${answerProbabilityHalf[0]} и ${answerProbabilityHalf[1]}, считает, что правильный:`;
     modalAnswer.textContent = `${answerProbabilityHalf[getRandomNumber(answerProbabilityHalf.length)]}`;
