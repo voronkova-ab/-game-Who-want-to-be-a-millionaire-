@@ -22,6 +22,8 @@ let moneyQuestion;
 let timer;
 let seconds = 60;
 let userName;
+let secondRandomNum;
+let firstRandomNum;
 
 const requestUrl = 'https://opentdb.com/api.php?amount=5&type=multiple';
 const preloader = document.querySelector('.preloader');
@@ -69,7 +71,6 @@ function processRequest() {
       let requestAllAnswers = result.map(item => [...item.incorrect_answers, item.correct_answer]);
       let questionsText = document.querySelectorAll('.question__text');
       let answersText = Array.from(questions).map(item => item.querySelectorAll('.answer__text'));
-
       insertTextQuestions(questionsText, requestQuestions);
       insertTextAnswers(answersText, requestAllAnswers);
     })
@@ -83,13 +84,17 @@ processRequest();
 
 
 function insertTextQuestions(defaultQuestions, requestQuestions) {
-    Array.from(defaultQuestions).forEach((item, index) => {
-      item.textContent = requestQuestions[index];
-    });
-  }
+  let textRequestQuestions = requestQuestions.map(item => removeExtraCharacters(item));
+
+  Array.from(defaultQuestions).forEach((item, index) => {
+    item.textContent = textRequestQuestions[index];
+  });
+}
 
 
 function insertTextAnswers(defaultAnswers, requestAnswers) {
+    let textRequestAnswers = requestAnswers.map(item => item.map(item => removeExtraCharacters(item)));
+
     let a, b, c, d;
     function getRandomAnswerNumber() {
         a = getRandomNumber(4);
@@ -109,20 +114,34 @@ function insertTextAnswers(defaultAnswers, requestAnswers) {
 
     defaultAnswers.forEach((arr, index) => {
         getRandomAnswerNumber();
-        arr[a].textContent = requestAnswers[index][0];
-        arr[b].textContent = requestAnswers[index][1];
-        arr[c].textContent = requestAnswers[index][2];
-        arr[d].textContent = requestAnswers[index][3];
+        arr[a].textContent = textRequestAnswers[index][0];
+        arr[b].textContent = textRequestAnswers[index][1];
+        arr[c].textContent = textRequestAnswers[index][2];
+        arr[d].textContent = textRequestAnswers[index][3];
 
-        arr[a].previousElementSibling.value = requestAnswers[index][0];
-        arr[b].previousElementSibling.value = requestAnswers[index][1];
-        arr[c].previousElementSibling.value = requestAnswers[index][2];
-        arr[d].previousElementSibling.value = requestAnswers[index][3];
+        arr[a].previousElementSibling.value = textRequestAnswers[index][0];
+        arr[b].previousElementSibling.value = textRequestAnswers[index][1];
+        arr[c].previousElementSibling.value = textRequestAnswers[index][2];
+        arr[d].previousElementSibling.value = textRequestAnswers[index][3];
     });
   }
 
+
 function makeQuestionsConteinerHeight(question) {
   questionsContainer.style.height = question.offsetHeight + 'px';
+}
+
+
+function removeExtraCharacters(string) {
+  return string.replace(/&quot;/g, `'`)
+               .replace(/&#039;/g, '`')
+               .replace(/&rsquo;/g, `'`)
+               .replace(/&ldquo;/g, `'`)
+               .replace(/&uacute;/g, `Ú`)
+               .replace(/&eacute;/g, 'É')
+               .replace(/&amp;/g, '&')
+               .replace(/&ouml;/g, 'Ö')
+               .replace(/&Uuml;/g, 'Ü');
 }
 
 
@@ -256,25 +275,60 @@ function showTrueAnswers(event) {
     return falseAnswers && !answer.hasAttribute('disabled');
   });
 
-  let isBtnOpinionAudience = Array.from(target.classList).includes('btn-help__item_opinion-audience');
-  const makeDisabled = (num) => falseAnswers[getRandomNumber(num)].setAttribute('disabled', 'disabled');
+  let isBtnFiftyFifty = Array.from(target.classList).includes('btn-help__item_fifty-fifty');
+  const makeDisabled = num => falseAnswers[num].setAttribute('disabled', 'disabled');
 
-  if (isBtnOpinionAudience || falseAnswers.length === 1) {
-    makeDisabled(falseAnswers.length);
-  } else {
-    let firstRandomNum = getRandomNumber(falseAnswers.length);
-    let secondRandomNum;
-    do {
-      secondRandomNum = getRandomNumber(falseAnswers.length);
-    } while (firstRandomNum === secondRandomNum)
+  if (isBtnFiftyFifty) {
+      generateTwoNumber();
 
-    makeDisabled(firstRandomNum);
-    makeDisabled(secondRandomNum);
-  }
+      makeDisabled(firstRandomNum);
+      makeDisabled(secondRandomNum);
+   } else showModal(target.classList[1], thisAnswers);
 
   target.removeEventListener('click', showTrueAnswers);
   target.style.opacity = '0';
 }
+
+
+function generateTwoNumber() {
+  firstRandomNum = getRandomNumber(3);
+  do {
+    secondRandomNum = getRandomNumber(3);
+  } while (firstRandomNum === secondRandomNum)
+}
+
+
+function showModal(classBtn, allAnswers) {
+  const modal = document.querySelector('.modal');
+  const modalTitle = document.querySelector('.modal__title');
+  const modalAnswer = document.querySelector('.modal__answer');
+
+  modal.classList.add('modal-active');
+  gameSlide.classList.add('content-blur');
+
+  let activeAnswers = Array.from(allAnswers).filter(item => !item.hasAttribute('disabled'));
+
+  if (classBtn === 'btn-help__item_opinion-audience') {
+    modalTitle.textContent = `Зал считает, что верный ответ:`;
+    modalAnswer.textContent = `${activeAnswers[getRandomNumber(activeAnswers.length)].value}`;
+  } else {
+    let correctAnswer = Array.from(allAnswers).filter(item => correctAnswers.includes(item.value))
+                        && Array.from(allAnswers).filter(item => requestCorrectAnswers.includes(item.value));
+
+    let falseAnswers = activeAnswers.filter(item => item.value !== correctAnswer[0].value);
+    let answerProbabilityHalf = [correctAnswer[0].value, falseAnswers[getRandomNumber(falseAnswers.length)].value];
+
+    modalTitle.textContent = `Ваш друг, выбирая из ответов: ${answerProbabilityHalf[0]} и ${answerProbabilityHalf[1]}, считает, что правильный:`;
+    modalAnswer.textContent = `${answerProbabilityHalf[getRandomNumber(answerProbabilityHalf.length)]}`;
+  }
+
+  const modalCloseBtn = document.querySelector('.modal__close-btn');
+  modalCloseBtn.onclick = () => {
+    modal.classList.remove('modal-active');
+    gameSlide.classList.remove('content-blur');
+  }
+}
+
 
 function getRandomNumber(max) {
   return Math.floor(Math.random() * max);
